@@ -1,10 +1,11 @@
 
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>APS Case Summarizer</title>
-    <style>
+<meta charset="utf-8"/>
+<title>APS Case Summarizer</title>
+<style>
         body {
             font-family: Arial, sans-serif;
             background-color: #191E3B;
@@ -40,18 +41,28 @@
             white-space: pre-wrap;
         }
     </style>
-</head>
-<body>
-    <h1>APS Case Summarizer</h1>
-    <label for="inputText">Paste Email Thread:</label>
-    <textarea id="inputText" rows="10" placeholder="Paste your email thread here..."></textarea>
-    <label for="fileInput">Or Upload a Text File:</label>
-    <input type="file" id="fileInput" accept=".txt">
-    <button onclick="summarize()">Summarize</button>
-    <div id="summary"></div>
-    <button onclick="copySummary()">Copy Summary</button>
-
-    <script>
+<style>
+#drop-zone {
+    border: 2px dashed #FDDB32;
+    padding: 20px;
+    text-align: center;
+    margin-top: 10px;
+    cursor: pointer;
+}
+#drop-zone.dragover {
+    background-color: #fef6d1;
+}
+</style></head>
+<body><button class="btn" id="clear-summary">Clear Summary</button><button class="btn" id="clear-input">Clear Input</button>
+<h1>APS Case Summarizer</h1>
+<label for="inputText">Paste Email Thread:</label>
+<textarea id="inputText" placeholder="Paste your email thread here..." rows="10"></textarea>
+<label for="fileInput">Or Upload a Text File:</label>
+<input accept=".txt" id="fileInput" type="file"/>
+<button onclick="summarize()">Summarize</button>
+<div id="summary"></div>
+<button onclick="copySummary()">Copy Summary</button>
+<script>
         async function summarize() {
             const inputText = document.getElementById('inputText').value;
             const summaryDiv = document.getElementById('summary');
@@ -99,5 +110,42 @@
             }
         });
     </script>
-</body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dropZone = document.getElementById("drop-zone");
+    const fileInput = document.getElementById("file-input");
+
+    dropZone.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+    });
+
+    dropZone.addEventListener("dragleave", function () {
+        dropZone.classList.remove("dragover");
+    });
+
+    dropZone.addEventListener("drop", function (e) {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+        }
+    });
+
+    dropZone.addEventListener("click", function (e) {
+        // Prevent file input from opening automatically
+        e.preventDefault();
+    });
+
+    document.getElementById("clear-input").addEventListener("click", function () {
+        document.getElementById("email-input").value = "";
+        fileInput.value = "";
+    });
+
+    document.getElementById("clear-summary").addEventListener("click", function () {
+        document.getElementById("summary-output").value = "";
+    });
+});
+</script></body>
 </html>
